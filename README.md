@@ -1,2 +1,6 @@
-# -An-lisis-de-Ventas-de-Walmart
- Análisis de Ventas de Walmart: Ingeniería de Características y Exploración
+# 📊 Análisis de Ventas de Walmart: Ingeniería de Características y Exploración
+## 🌟 Descripción del Proyecto
+Este proyecto se enfoca en el análisis exploratorio de datos (EDA) y la ingeniería de características (Feature Engineering) de datos de ventas reales de Walmart (originalmente provistos por Kaggle). El objetivo principal es transformar los datos crudos, unificando información de ventas, tiendas y factores externos (economía y promociones), para obtener insights clave sobre:Estacionalidad y Eventos: Impacto de los días festivos y las estaciones del año en el volumen de ventas. Eficiencia Operacional: Desempeño y rentabilidad de los diferentes tipos de tiendas (A, B, C) por unidad de espacio. Factores Económicos: Relación entre el Índice de Precios al Consumidor (CPI) y la Tasa de Desempleo con las ventas semanales. El resultado final es un conjunto de datos limpio y listo para ser importado en una herramienta de visualización (como Power BI o Tableau) para crear un dashboard ejecutivo.
+ ## 🛠️ Pipeline de Procesamiento (Python/Pandas)
+ El proceso de limpieza, unificación y creación de variables se dividió en varias fases clave:Fase 1: Carga y Unificación de Datos 
+ 📥Se cargaron tres conjuntos de datos distintos y se unificaron en un solo DataFrame (df_final).
