@@ -1,0 +1,151 @@
+# 🧭 Fase 1: Comprensión y Carga de Datos
+El primer paso en cualquier proyecto de análisis de datos es entender qué información tienes y cargarla en tu entorno de trabajo.
+
+1. Análisis de Archivos CSV
+Ya has adjuntado los archivos: train.csv, features.csv, y stores.csv. Vamos a resumir qué contiene cada uno para tener una idea clara de las variables a nuestra disposición.
+
+train.csv (Datos de Transacciones):
+
+Store: El número de la tienda.
+
+Dept: El número del departamento.
+
+Date: La fecha de la semana.
+
+Weekly_Sales: Las ventas semanales (esta es probablemente la variable objetivo a predecir/analizar).
+
+IsHoliday: Indicador booleano de si la semana es una semana festiva.
+
+features.csv (Características/Variables Externas):
+
+Store, Date, IsHoliday: Variables para unir con train.csv.
+
+Temperature: Temperatura promedio en la región de la tienda.
+
+Fuel_Price: Precio del combustible en la región.
+
+MarkDown1-5: Datos de rebajas promocionales (estos tienen muchos valores faltantes al inicio, pues las rebajas comenzaron a registrarse más tarde).
+
+CPI: Índice de Precios al Consumidor.
+
+Unemployment: Tasa de desempleo.
+
+stores.csv (Datos Estáticos de las Tiendas):
+
+Store: El número de la tienda.
+
+Type: El tipo de tienda (A, B o C).
+
+Size: El tamaño de la tienda en superficie.
+
+# ⚙️ Fase 2: Limpieza y Preparación de Datos (Feature Engineering)
+Tu análisis de .info() nos ha revelado dos problemas principales que debemos corregir antes de iniciar cualquier análisis o modelo:
+
+Tipos de Datos Incompatibles: Las columnas Date en df_train y df_features están como object (string), pero para análisis de series de tiempo y para unirlas correctamente, deben ser datetime.
+
+Valores Faltantes (NaNs): Las columnas MarkDown1 a MarkDown5 en df_features tienen muchísimos valores nulos (menos de la mitad de las filas tienen datos).
+
+Vamos a crear el pipeline para corregir esto:
+
+Paso 1: Conversión de Tipos de Datos y Unificación
+Primero, corregiremos el formato de las fechas y luego uniremos los tres conjuntos de datos en uno solo (df_final).
+
+🧹 Fase 2: Paso 2 - Imputación de Valores Faltantes
+Como discutimos, el valor nulo en una columna de rebaja (MarkDown) significa que no se aplicó esa rebaja en esa semana y tienda específica, por lo que el descuento fue cero.
+
+Vamos a reemplazar todos esos valores NaN con 0.0.
+
+📈 Fase 3: Ingeniería de Características y Análisis Inicial
+Una vez que me confirmes que la limpieza está completa, pasaremos a la fase de Feature Engineering (Creación de Nuevas Características) y a un Análisis Inicial de las ventas.
+
+Pasos a seguir:
+
+Creación de Variables Temporales: Extraeremos características útiles de la columna Date (como año, mes, semana, trimestre).
+
+Análisis de Variables Categóricas: Veremos cómo se distribuyen las ventas por Type de tienda y por IsHoliday.
+
+Primer Gráfico: Crearemos el primer gráfico de tu proyecto: una visualización de las Ventas Semanales Promedio a lo largo del tiempo.
+
+📈 Fase 3: Ingeniería de Características (Feature Engineering)
+El propósito de esta fase es extraer información oculta o latente de las variables existentes para mejorar la capacidad de nuestro análisis y futuros modelos.
+
+Paso 1: Extracción de Características Temporales
+La columna Date está en formato datetime, lo cual es perfecto. Vamos a extraer componentes de tiempo que puedan influir en las Weekly_Sales.
+
+Por ejemplo, es probable que las ventas varíen según el mes, el día de la semana o el año.
+
+Paso 2: Ingeniería de Características Adicionales
+Podemos crear una característica simple, pero muy poderosa, combinando las promociones.
+
+Total_MarkDown: La suma de todas las rebajas. Una rebaja total alta podría implicar una semana de mucha promoción o una liquidación, lo que generalmente impulsa las ventas.
+
+Paso 3: Análisis Inicial de Ventas - Agregación
+Antes de hacer un gráfico, necesitamos agregar los datos. Recuerda que df_final tiene ventas a nivel de Departamento y Tienda por semana. Para ver la tendencia general de Walmart, debemos sumar las ventas por semana.
+
+📊 Fase 4: Visualización (Primer Gráfico)
+Ahora que tenemos los datos de ventas semanales agregadas, vamos a generar nuestro primer gráfico, que es el más importante para los stakeholders: la tendencia de ventas en el tiempo.
+
+🎯 Análisis del Patrón de Ventas
+1. Estacionalidad (Navidad y Black Friday)
+El patrón que ves es la estacionalidad clásica del retail.
+
+Pico de Navidad (Tú observación): El pico más grande al final de cada año (diciembre) es impulsado por la temporada navideña. Esto es predecible y masivo.
+
+Pico de Black Friday: El Black Friday en EE. UU. es siempre el cuarto viernes de noviembre. Fíjate bien en la penúltima semana de noviembre de cada año. Verás un pico significativo y agudo justo antes del gran pico de Navidad.
+
+Punto clave: Si miras de cerca la semana anterior al 25 de diciembre, el pico de Black Friday (última semana de noviembre) es, a menudo, el más alto en ventas en un solo día/semana debido a las ofertas, aunque el volumen total de la temporada navideña lo supere.
+
+2. Otros Patrones
+Pico de Febrero: Si miras a principios de año, hay un pico menor. Este coincide con el Super Bowl (generalmente la primera o segunda semana de febrero) y, más marcadamente, el Día de San Valentín (14 de febrero).
+
+Días Festivos de Mitad de Año: El gráfico será relativamente plano, pero con pequeños repuntes alrededor de Semana Santa (Easter) y el 4 de Julio (Día de la Independencia de EE. UU.).
+
+Tendencia General: Si ignoras los picos, la línea de base de ventas semanales (excluyendo los días festivos) parece ser relativamente estable a lo largo de los tres años de datos, aunque con una ligera tendencia positiva a medida que avanzan los años.
+
+📊 Análisis por Tipo de TiendaAquí están tus conclusiones basadas en los datos:
+Tienda tipo A genera: $4.33 billones. Con una superficie de: 182K$ pies². y un promedio de 22
+tiendas. Es el motor principal. Más ventas, más tamaño y más tiendas.
+Tienda tipo B genera: $2.00 billones. Con una superficie de: 101K pies² y un promedio de 17 tiendas. Es la segunda en ventas. Tiendas de tamaño medio, buen desempeño por tienda.
+Tienda tipo C genera: 405 millones. Con una superficie de : 40K pies² y un promedio de 6 tiendas. La que menos contribuye. Tiendas pequeñas y la menor cantidad en la muestra.
+
+🧐 Fase 6: Métricas de Eficiencia
+Si bien las ventas totales son importantes, los stakeholders también querrán saber qué tan eficiente es cada tipo de tienda. Una tienda Tipo A vende más, pero ¿es más eficiente por metro cuadrado que una Tipo C?
+Vamos a calcular dos métricas de eficiencia:
+Venta Promedio por Tienda: ¿Cuánto vende, en promedio, cada tienda de ese tipo?
+Venta Promedio por Pie Cuadrado (Ventas/Size): Una métrica de eficiencia de espacio.
+
+El hallazgo clave para los stakeholders:Las tiendas Tipo C son las más rentables por unidad de espacio ($1,667.27 \text{ por pie cuadrado})$, lo que sugiere que 
+su surtido, diseño, o ubicación en áreas pequeñas es extremadamente efectivo.Las tiendas Tipo A, aunque generan la mayor cantidad de dinero, son las menos eficientes
+por pie cuadrado ($1,080.30$).Esto plantea preguntas interesantes para los stakeholders sobre la optimización del diseño y la estrategia de inventario en los formatos 
+de tienda más grandes.
+
+🛒 Fase 7: El Impacto de los Días Festivos
+Ahora, vamos a generar la última métrica de alto impacto para el dashboard: el efecto de que una semana sea festiva (IsHoliday).
+El aumento porcentual en las ventas semanales promedio durante los días festivos es de: $\mathbf{7.13\%}$.Esto confirma que las semanas festivas tienen un 
+impacto positivo y significativo en el rendimiento promedio de las ventas en todos los departamentos y tiendas, lo cual es un hallazgo clave para planificar 
+el inventario y la dotación de personal.
+
+🌎 Fase 9: Análisis de Factores Económicos (CPI y Desempleo)
+Las variables económicas como el Índice de Precios al Consumidor (CPI) y la Tasa de Desempleo (Unemployment) son indicadores clave de la salud económica y 
+pueden influir directamente en el gasto del consumidor.
+Vamos a calcular las correlaciones de estas variables con las ventas. La correlación nos dirá qué tan fuerte es la relación lineal y en qué dirección (positiva o
+negativa).
+Paso 1: Cálculo de la Correlación
+Para obtener una visión general, usaremos el DataFrame df_final (a nivel de tienda/departamento/semana) y calcularemos la correlación de Weekly_Sales con las 
+variables económicas.
+Conclusión Clave: A pesar de la intuición económica, los factores internos (estacionalidad, días festivos, promociones) y las características de la tienda 
+(Type, Size) son mucho más relevantes para la variación de las ventas que los factores económicos externos (CPI y Unemployment) a nivel semanal.
+
+🍁 Fase 10: Análisis de Ventas por Estación del Año
+Para analizar la rentabilidad por estación, primero necesitamos definir qué semanas pertenecen a cada estación.
+Aunque las fechas exactas varían, usaremos una definición simplificada basada en el Mes que ya extrajimos en la Fase 3:
+Invierno (Winter): Dic, Ene, Feb (12, 1, 2)
+Primavera (Spring): Mar, Abr, May (3, 4, 5)
+Verano (Summer): Jun, Jul, Ago (6, 7, 8)
+Otoño (Fall/Autumn): Sep, Oct, Nov (9, 10, 11)
+
+Conclusión Clave:
+Invierno es la estación más rentable. Esto está directamente relacionado con los picos de Navidad y Black Friday que ocurren en diciembre y noviembre,
+los cuales elevan drásticamente el promedio de ventas por semana en esta temporada.
+El verano es la menos rentable. Las ventas se ralentizan, posiblemente debido a las vacaciones y la menor actividad de compras masivas, quedando por 
+debajo de la primavera y el otoño.
